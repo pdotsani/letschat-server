@@ -2,6 +2,7 @@
   "name": "letschat-server",
   "version": "1.0.0",
   "description": "Basic Express server with test route",
+  "type": "module",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -11,7 +12,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.18.2"
+    "dotenv": "^17.2.3",
+    "express": "^4.18.2",
+    "ollama": "^0.6.3"
   }
 }
-

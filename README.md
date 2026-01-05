@@ -14,6 +14,15 @@ A basic Node.js Express server with a test route.
    npm install
    ```
 
+2. Configure environment variables:
+   ```bash
+   cp .env.example .env
+   ```
+   
+   Edit `.env` and set your configuration:
+   - `DEFAULT_MODEL` - The default model to use (default: `llama2`)
+   - `PORT` - Server port (default: `3000`)
+
 ## Running the Service
 
 Start the server:
