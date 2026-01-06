@@ -20,6 +20,7 @@
   "devDependencies": {
     "@types/express": "^4.17.21",
     "@types/node": "^20.10.6",
+    "@types/letschat": "git+ssh://git@github.com:pdotsani/letschat-types.git#main",
     "tsx": "^4.7.0",
     "typescript": "^5.3.3"
   }

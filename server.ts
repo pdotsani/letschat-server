@@ -1,23 +1,29 @@
 import 'dotenv/config';
-import ollama from 'ollama';
+import ollama, { ChatResponse, Message } from 'ollama';
 import express, { Request, Response } from 'express';
+import { ResponseMessage, Role } from 'letschat';
 
 const app = express();
-const PORT = process.env.PORT ? process.env.PORT : 5000;
+const PORT = process.env.PORT ? process.env.PORT : 5050;
 
 // Middleware
 app.use(express.json());
 
 // Chat endpoint
 app.post('/api/chat', async (req: Request, res: Response) => {
-  const { message, history, model } = req.body;
+  const { content, history, model } = req.body;
 
   if (!model) {
     return res.status(400).json({ error: 'Model is required' });
   }
 
-  if (!message) {
-    return res.status(400).json({ error: 'Message is required' });
+  if (!content) {
+    return res.status(400).json({ error: 'Content is required' });
+  }
+
+  const newMessage: Message = {
+    role: Role.User,
+    content
   }
 
   try {
@@ -25,14 +31,24 @@ app.post('/api/chat', async (req: Request, res: Response) => {
       model: model,
       messages: [
         ...(history || []),
-        {
-          role: 'user',
-          content: message
-        }
+        newMessage
       ]
     });
 
-    return res.json({ response });
+    const { 
+      created_at, 
+      message: { 
+        role: messageRole, 
+        content 
+      }} = response as ChatResponse;
+
+    const returnMessage: ResponseMessage = {
+      content,
+      messageRole: messageRole as Role,
+      timestamp: created_at
+    }
+    
+    return res.json(returnMessage);
 
   } catch (error) {
     return res.status(500).json({ error: 'Internal server error' });
