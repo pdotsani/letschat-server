@@ -1,13 +1,21 @@
 import 'dotenv/config';
 import ollama, { ChatResponse, Message } from 'ollama';
 import express, { Request, Response } from 'express';
-import { ResponseMessage, Role } from 'letschat';
+import { ResponseMessage, Role, RoleTypes } from '@Types/letschat';
+import cors from 'cors';
+import morgan from 'morgan';
+
 
 const app = express();
 const PORT = process.env.PORT ? process.env.PORT : 5050;
 
 // Middleware
 app.use(express.json());
+
+// CORS middleware
+app.use(cors());
+
+app.use(morgan('dev')); 
 
 // Chat endpoint
 app.post('/api/chat', async (req: Request, res: Response) => {
@@ -22,7 +30,7 @@ app.post('/api/chat', async (req: Request, res: Response) => {
   }
 
   const newMessage: Message = {
-    role: Role.User,
+    role: RoleTypes.User,
     content
   }
 
@@ -38,13 +46,13 @@ app.post('/api/chat', async (req: Request, res: Response) => {
     const { 
       created_at, 
       message: { 
-        role: messageRole, 
+        role, 
         content 
       }} = response as ChatResponse;
 
     const returnMessage: ResponseMessage = {
       content,
-      messageRole: messageRole as Role,
+      messageRole: role as Role,
       timestamp: created_at
     }
     
