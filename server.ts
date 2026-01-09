@@ -34,11 +34,16 @@ app.post('/api/chat', async (req: Request, res: Response) => {
     content
   }
 
+  const modifiedHistory = history?.map((message: ResponseMessage) => ({
+    role: message.messageRole,
+    content: message.content
+  }));
+
   try {
     const response = await ollama.chat({
       model: model,
       messages: [
-        ...(history || []),
+        ...(modifiedHistory || []),
         newMessage
       ]
     });
