@@ -1,7 +1,7 @@
 import 'dotenv/config';
-import ollama, { ChatResponse, Message } from 'ollama';
+import { Ollama, ChatResponse, Message } from 'ollama';
 import express, { Request, Response } from 'express';
-import { ResponseMessage, Role, RoleTypes } from '@Types/letschat';
+import { type ResponseMessage, type Role, RoleTypes } from 'letschat-types';
 import cors from 'cors';
 import morgan from 'morgan';
 
@@ -16,6 +16,10 @@ app.use(express.json());
 app.use(cors());
 
 app.use(morgan('dev')); 
+
+const ollama = new Ollama({
+  host: process.env.OLLAMA_HOST || 'http://localhost:11434'
+});
 
 // Chat endpoint
 app.post('/api/chat', async (req: Request, res: Response) => {
