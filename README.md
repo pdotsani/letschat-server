@@ -9,7 +9,17 @@ A basic Node.js Express server with TypeScript, featuring a test route and chat 
 
 ## Setup
 
-1. Install dependencies:
+1. Gain access to common library:
+   - Ask administrator for access to `letschat-types` library
+   - add ssh key from `letschat-types` to your ssh-agent
+   ```bash
+      # Start SSH agent if needed
+      eval "$(ssh-agent -s)"
+
+      # Add your GitHub SSH key
+      ssh-add ~/.ssh/id_rsa  # or whatever key you use for GitHub
+   ```
+2. Install dependencies:
    ```bash
    npm install
    ```
@@ -18,10 +28,11 @@ A basic Node.js Express server with TypeScript, featuring a test route and chat 
    ```bash
    cp .env.example .env
    ```
-   
+
    Edit `.env` and set your configuration:
    - `DEFAULT_MODEL` - The default model to use (default: `llama2`)
-   - `PORT` - Server port (default: `5000`)
+   - `PORT` - Server port (default: `3000`)
+   - `OLLAMA_HOST` - Only needed for Docker deployment. URL for Ollama host (default: `http://localhost:11434`)
 
 ## Running the Service
 
@@ -32,21 +43,16 @@ Run the server in development mode with hot reload:
 npm run dev
 ```
 
-### Production Mode
+### Docker Deployment
 
-Build the TypeScript code:
+Build the Docker image:
 ```bash
-npm run build
+docker build --ssh default -t letschat-server .
 ```
 
-Start the server:
+Run the container:
 ```bash
-npm start
+docker run -p 5050:5050 --env-file .env letschat-server:latest
 ```
 
-The server will start on `http://localhost:5000` by default. You can change the port by setting the `PORT` environment variable:
-
-```bash
-PORT=8080 npm start
-```
-
+The server will start on `http://localhost:5050`.

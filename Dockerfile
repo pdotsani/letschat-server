@@ -14,14 +14,12 @@ RUN --mount=type=ssh \
     ssh-keyscan github.com >> ~/.ssh/known_hosts && \
     npm ci
 
+# Mount .env file at build time and export environment variables
+RUN --mount=type=secret,id=dotenv,dst=/tmp/.env \
+    export $(cat /tmp/.env | xargs)
+
 # Copy source code
 COPY . .
-
-# Environment variables
-ARG DEFAULT_MODEL=gemma3
-ENV DEFAULT_MODEL=$DEFAULT_MODEL
-ARG OLLAMA_HOST=http://host.docker.internal:11434
-ENV OLLAMA_HOST=$OLLAMA_HOST
 
 # Build TypeScript
 RUN npm run build
