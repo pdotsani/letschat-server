@@ -70,7 +70,7 @@ app.post('/api/chat', async (req: Request, res: Response) => {
     return res.json(returnMessage);
 
   } catch (error) {
-    return res.status(500).json({ error: 'Internal server error' });
+    return res.status(500).json({ error: error });
   }
 });
 
