@@ -33,6 +33,7 @@ A basic Node.js Express server with TypeScript, featuring a test route and chat 
    - `DEFAULT_MODEL` - The default model to use (default: `llama2`)
    - `PORT` - Server port (default: `3000`)
    - `OLLAMA_HOST` - Only needed for Docker deployment. URL for Ollama host (default: `http://localhost:11434`)
+   - `FRONTEND_DOMAIN` - Only needed for Docker deployment. Frontend domain (default: `http://localhost:3000`)
 
 ## Running the Service
 
