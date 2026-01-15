@@ -68,7 +68,11 @@ app.post('/api/chat', async (req: Request, res: Response) => {
     return res.json(returnMessage);
 
   } catch (error) {
-    return res.status(500).json({ error: error });
+    console.error(error);
+    return res.status(500).json({ 
+      error: 'Failed response',
+      message: error instanceof Error ? error.message : 'Unknown error'
+    });
   }
 });
 
