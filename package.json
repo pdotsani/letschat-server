@@ -17,9 +17,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "letschat-types": "git+ssh://git@github.com:pdotsani/letschat-types.git#main",
+    "@supabase/supabase-js": "^2.91.0",
     "dotenv": "^17.2.3",
     "express": "^4.18.2",
+    "letschat-types": "git+ssh://git@github.com:pdotsani/letschat-types.git#main",
     "morgan": "^1.10.1",
     "ollama": "^0.6.3"
   },

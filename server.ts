@@ -5,6 +5,8 @@ import { type ResponseMessage, type Role, RoleTypes } from 'letschat-types';
 import cors from 'cors';
 import morgan from 'morgan';
 
+import { jwtAuth } from './middleware/auth';
+
 
 const app = express();
 const PORT = process.env.PORT ? process.env.PORT : 5050;
@@ -16,6 +18,8 @@ app.use(express.json());
 app.use(cors());
 
 app.use(morgan('dev')); 
+
+app.use('/api', jwtAuth);
 
 const ollama = new Ollama({
   host: process.env.OLLAMA_HOST || 'http://localhost:11434'
