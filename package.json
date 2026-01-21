@@ -2,7 +2,6 @@
   "name": "letschat-server",
   "version": "1.0.0",
   "description": "Basic Express server with test route",
-  "type": "module",
   "main": "dist/server.js",
   "scripts": {
     "build": "tsc",
