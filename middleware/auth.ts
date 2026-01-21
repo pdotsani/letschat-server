@@ -1,6 +1,7 @@
+import { Request, Response, NextFunction } from 'express';
 import { supabase } from "../lib/supabaseClient";
 
-export async function jwtAuth(req: any, res: any, next: any) {
+export async function jwtAuth(req: Request, res: Response, next: NextFunction) {
   // Development: skip auth entirely
   if (process.env.NODE_ENV !== 'production') {
     return next()
@@ -20,7 +21,6 @@ export async function jwtAuth(req: any, res: any, next: any) {
       return res.status(401).json({ error: 'Invalid or expired token' })
     }
     
-    req.user = user
     next()
   } catch (err) {
     console.error('Auth error:', err)
