@@ -51,12 +51,12 @@ npm run dev
 
 Build the Docker image:
 ```bash
-docker build --ssh default -t letschat-server .
+docker build --ssh default=$SSH_AUTH_SOCK --secret id=dotenv,src=.env -t letschat-server .
 ```
 
 Run the container:
 ```bash
-docker run -p 5050:5050 --env-file .env letschat-server:latest
+docker run -p 3000:3000 letschat-server
 ```
 
 The server will start on `http://localhost:5050`.
