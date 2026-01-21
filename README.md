@@ -30,10 +30,13 @@ A basic Node.js Express server with TypeScript, featuring a test route and chat 
    ```
 
    Edit `.env` and set your configuration:
+   - `NODE_ENV` - Set to `production` for production deployment (default: `development`)
    - `DEFAULT_MODEL` - The default model to use (default: `llama2`)
    - `PORT` - Server port (default: `3000`)
    - `OLLAMA_HOST` - Only needed for Docker deployment. URL for Ollama host (default: `http://localhost:11434`)
    - `FRONTEND_DOMAIN` - Only needed for Docker deployment. Frontend domain (default: `http://localhost:3000`)
+   - `SUPABASE_URL` - Supabase URL for authentication (default: `undefined`)
+   - `SUPABASE_PUBLISHABLE_KEY` - Supabase publishable key for authentication (default: `undefined`)
 
 ## Running the Service
 

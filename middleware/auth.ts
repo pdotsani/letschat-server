@@ -1,4 +1,3 @@
-import { NextFunction } from "express";
 import { supabase } from "../lib/supabaseClient";
 
 export async function jwtAuth(req: any, res: any, next: any) {
