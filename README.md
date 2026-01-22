@@ -35,7 +35,7 @@ The frontend is a Next.js app, which can be found [here](https://github.com/pdot
 
    Edit `.env` and set your configuration:
    - `NODE_ENV` - Set to `production` for production deployment (default: `development`)
-   - `DEFAULT_MODEL` - The default model to use (default: `llama2`)
+   - `DEFAULT_MODEL` - The default model to use (default: `gemma2`)
    - `PORT` - Server port (default: `3000`)
    - `OLLAMA_HOST` - Only needed for Docker deployment. URL for Ollama host (default: `http://localhost:11434`)
    - `FRONTEND_DOMAIN` - Only needed for Docker deployment. Frontend domain (default: `http://localhost:3000`)
