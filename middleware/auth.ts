@@ -1,6 +1,15 @@
 import { Request, Response, NextFunction } from 'express';
 import { supabase } from "../lib/supabaseClient";
 
+/**
+ * jwtAuth
+ * 
+ * Middleware to authenticate requests using a JWT token. We try to validate the token using Supabase.
+ * 
+ * @param req 
+ * @param res 
+ * @param next 
+ */
 export async function jwtAuth(req: Request, res: Response, next: NextFunction) {
   // Development: skip auth entirely
   if (process.env.NODE_ENV !== 'production') {

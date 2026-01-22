@@ -1,11 +1,15 @@
-# Let's Chat Server
+# letschat-server
 
-A basic Node.js Express server with TypeScript, featuring a test route and chat API.
+This is a server that allows you to leverage the message api of ollama with any of the models available. You can link this up to a frontend. For the purposes of authentication, we are using Supabase.
 
 ## Prerequisites
 
 - Node.js (v18 or higher recommended)
 - npm (comes with Node.js)
+- Ollama
+- Supabase
+
+The frontend is a Next.js app, which can be found [here](https://github.com/pdotsani/letschat-frontend). You supabase credetials for the frontend will be used to authenticate the server.
 
 ## Setup
 

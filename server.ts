@@ -7,25 +7,27 @@ import morgan from 'morgan';
 
 import { jwtAuth } from './middleware/auth';
 
-
 const app = express();
 const PORT = process.env.PORT ? process.env.PORT : 5050;
 
 // Middleware
 app.use(express.json());
-
-// CORS middleware
 app.use(cors());
+app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
 
-app.use(morgan('dev')); 
-
+// Route middleware
 app.use('/api', jwtAuth);
 
 const ollama = new Ollama({
   host: process.env.OLLAMA_HOST || 'http://localhost:11434'
 });
 
-// Chat endpoint
+/**
+ * /api/chat
+ * 
+ * Endpoint to handle chat requests. This endpoint takes in a content and history, and returns a response message.
+ * 
+ */
 app.post('/api/chat', async (req: Request, res: Response) => {
   const { content, history, model } = req.body;
 
@@ -80,7 +82,6 @@ app.post('/api/chat', async (req: Request, res: Response) => {
   }
 });
 
-// Start server
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
