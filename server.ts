@@ -6,6 +6,9 @@ import cors from 'cors';
 import morgan from 'morgan';
 
 import { jwtAuth } from './middleware/auth';
+import { createChat } from './lib/methods/chats/create';
+import { createMessage } from './lib/methods/messages/create';
+import { summarize } from './lib/methods/messages/summarize';
 
 const app = express();
 const PORT = process.env.PORT ? process.env.PORT : 5050;
@@ -13,7 +16,7 @@ const PORT = process.env.PORT ? process.env.PORT : 5050;
 // Middleware
 app.use(express.json());
 app.use(cors());
-app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
+app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'development'));
 
 // Route middleware
 app.use('/api', jwtAuth);
@@ -29,6 +32,7 @@ const ollama = new Ollama({
  * 
  */
 app.post('/api/chat', async (req: Request, res: Response) => {
+  let chatId: string | undefined = req.body.chatId;
   const { content, history, model } = req.body;
 
   if (!model) {
@@ -44,9 +48,29 @@ app.post('/api/chat', async (req: Request, res: Response) => {
     content
   }
 
+  if (!history.length) {
+    const summary = await summarize(ollama, model, newMessage);
+    const data = await createChat(res, summary);
+    
+    chatId = data.id;
+
+    if (!chatId) {
+      return res.status(500).json({ error: 'Failed to create chat' });
+    }
+
+    await createMessage(res, {
+      chatId,
+      content: newMessage.content,
+      role: newMessage.role
+    })
+  // else {
+  //   await createMessage(res, newMessage)
+  // }
+  }
+
   const modifiedHistory = history?.map((message: ResponseMessage) => ({
     role: message.messageRole,
-    content: message.content
+     content: message.content
   }));
 
   try {

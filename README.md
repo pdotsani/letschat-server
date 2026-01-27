@@ -11,6 +11,8 @@ This is a server that allows you to leverage the message api of ollama with any 
 
 The frontend is a Next.js app, which can be found [here](https://github.com/pdotsani/letschat-frontend). You supabase credetials for the frontend will be used to authenticate the server.
 
+We generate database schema in the supbase dashboard, see [this](/docs/schemas.md) for more information.
+
 ## Setup
 
 1. Gain access to common library:

@@ -1,0 +1,32 @@
+import { Response } from 'express';
+
+export const createChat = async (res: Response, name: string) => {
+  try {
+    const client = res.locals.client;
+    const { data: { user }, error: userError } = await client.auth.getUser();
+
+    if (userError || !user) {
+      throw new Error(userError?.message ? userError.message : 'Failed to get user');
+    }
+
+    const { data, error } = await client.from('chats').insert({
+      name,
+    })
+    .select('id');
+
+    if (error) {
+      throw new Error(error.message);
+    }
+    
+    return data[0];
+  } catch (error: any) {
+    console.error("supabase error", error);
+    return new Response(JSON.stringify({ 
+      error: error.message,
+      details: error.details 
+    }), { 
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }  
+}

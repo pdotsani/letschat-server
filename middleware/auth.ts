@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import { supabase } from "../lib/supabaseClient";
+import { supabase } from "../lib/supabase/supabaseClient";
+import { createSupabaseClient } from '../lib/supabase/createSupabaseClient';
 
 /**
  * jwtAuth
@@ -29,6 +30,8 @@ export async function jwtAuth(req: Request, res: Response, next: NextFunction) {
     if (error || !user) {
       return res.status(401).json({ error: 'Invalid or expired token' })
     }
+
+    res.locals.client = await createSupabaseClient(token);
     
     next()
   } catch (err) {
