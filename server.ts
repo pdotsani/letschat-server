@@ -32,8 +32,7 @@ const ollama = new Ollama({
  * 
  */
 app.post('/api/chat', async (req: Request, res: Response) => {
-  let chatId: string | undefined = req.body.chatId;
-  const { content, history, model } = req.body;
+  const { content, history, model, chatId } = req.body;
 
   if (!model) {
     return res.status(400).json({ error: 'Model is required' });
@@ -43,43 +42,55 @@ app.post('/api/chat', async (req: Request, res: Response) => {
     return res.status(400).json({ error: 'Content is required' });
   }
 
-  const newMessage: Message = {
-    role: RoleTypes.User,
-    content
+  const newMessage: ResponseMessage = {
+    messageRole: RoleTypes.User,
+    content,
   }
 
   if (!history.length) {
     const summary = await summarize(ollama, model, newMessage);
     const data = await createChat(res, summary);
     
-    chatId = data.id;
+    const newChatId = data.id;
 
-    if (!chatId) {
+    if (!newChatId) {
       return res.status(500).json({ error: 'Failed to create chat' });
+    }
+
+    await createMessage(res, {
+      chatId: newChatId,
+      content: newMessage.content,
+      role: newMessage.messageRole
+    })
+  } else {
+    if (!chatId) {
+      return res.status(400).json({ error: 'ChatId is required' });
     }
 
     await createMessage(res, {
       chatId,
       content: newMessage.content,
-      role: newMessage.role
+      role: newMessage.messageRole
     })
-  // else {
-  //   await createMessage(res, newMessage)
-  // }
   }
 
   const modifiedHistory = history?.map((message: ResponseMessage) => ({
     role: message.messageRole,
-     content: message.content
+    content: message.content
   }));
+
+  const modifiedNewMessage: Message = {
+    role: newMessage.messageRole,
+    content: newMessage.content
+  }
 
   try {
     const response = await ollama.chat({
       model: model,
       messages: [
         ...(modifiedHistory || []),
-        newMessage
-      ]
+        modifiedNewMessage
+      ],
     });
 
     const { 
@@ -94,6 +105,12 @@ app.post('/api/chat', async (req: Request, res: Response) => {
       messageRole: role as Role,
       timestamp: created_at
     }
+
+    await createMessage(res, {
+      chatId,
+      content: returnMessage.content,
+      role: returnMessage.messageRole
+    })
     
     return res.json(returnMessage);
 
