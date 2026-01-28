@@ -167,6 +167,33 @@ app.get('/api/chat/:chatId', async (req: Request, res: Response) => {
   return res.json(data);
 });
 
+app.delete('/api/chat/:chatId', async (req: Request, res: Response) => {
+  const client = res.locals.client;
+  const { data: { user }, error: userError } = await client.auth.getUser();
+
+  if (userError || !user) {
+    throw new Error(userError?.message ? userError.message : 'Failed to get user');
+  }
+
+  const { chatId } = req.params;
+
+  try {
+    const { error } = await client
+      .from('chats')
+      .delete()
+      .eq('id', chatId)
+      .eq('user_id', user.id);
+
+    if (error) {
+      throw error;
+    }
+
+    return res.json({ message: 'Chat deleted' });
+  } catch (error) {
+    return res.status(500).json({ error: 'Failed to delete chat' });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
