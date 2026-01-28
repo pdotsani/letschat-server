@@ -123,6 +123,50 @@ app.post('/api/chat', async (req: Request, res: Response) => {
   }
 });
 
+app.get('/api/chats', async (req: Request, res: Response) => {
+  const client = res.locals.client;
+  const { data: { user }, error: userError } = await client.auth.getUser();
+
+  if (userError || !user) {
+    throw new Error(userError?.message ? userError.message : 'Failed to get user');
+  }
+
+  const { data, error } = await client
+    .from('chats')
+    .select('id,name,updated_at')
+    .eq('user_id', user.id)
+    .order('updated_at', { ascending: false });
+
+  if (error) {
+    return res.status(500).json({ error: 'Failed to get chats' });
+  }
+
+  return res.json(data);
+});
+
+app.get('/api/chat/:chatId', async (req: Request, res: Response) => {
+  const client = res.locals.client;
+  const { data: { user }, error: userError } = await client.auth.getUser();
+
+  if (userError || !user) {
+    throw new Error(userError?.message ? userError.message : 'Failed to get user');
+  }
+
+  const { chatId } = req.params;
+
+  const { data, error } = await client
+    .from('messages')
+    .select('message,role,created_at')
+    .eq('chat_id', chatId)
+    .order('created_at', { ascending: true });
+
+  if (error) {
+    return res.status(500).json({ error: 'Failed to get chat messages' });
+  }
+
+  return res.json(data);
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
