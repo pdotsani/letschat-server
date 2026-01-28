@@ -32,7 +32,9 @@ const ollama = new Ollama({
  * 
  */
 app.post('/api/chat', async (req: Request, res: Response) => {
-  const { content, history, model, chatId } = req.body;
+  const { content, history, model } = req.body;
+
+  let chatId = req.body.chatId;
 
   if (!model) {
     return res.status(400).json({ error: 'Model is required' });
@@ -51,14 +53,14 @@ app.post('/api/chat', async (req: Request, res: Response) => {
     const summary = await summarize(ollama, model, newMessage);
     const data = await createChat(res, summary);
     
-    const newChatId = data.id;
+    chatId = data.id;
 
-    if (!newChatId) {
+    if (!chatId) {
       return res.status(500).json({ error: 'Failed to create chat' });
     }
 
     await createMessage(res, {
-      chatId: newChatId,
+      chatId: chatId,
       content: newMessage.content,
       role: newMessage.messageRole
     })
@@ -103,7 +105,8 @@ app.post('/api/chat', async (req: Request, res: Response) => {
     const returnMessage: ResponseMessage = {
       content,
       messageRole: role as Role,
-      timestamp: created_at
+      timestamp: created_at,
+      chatId
     }
 
     await createMessage(res, {

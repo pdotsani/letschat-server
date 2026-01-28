@@ -9,10 +9,9 @@ export const createChat = async (res: Response, name: string) => {
       throw new Error(userError?.message ? userError.message : 'Failed to get user');
     }
 
-    const { data, error } = await client.from('chats').insert({
-      name,
-    })
-    .select('id');
+    const { data, error } = await client.from('chats')
+      .insert({ name })
+      .select('id');
 
     if (error) {
       throw new Error(error.message);
@@ -21,12 +20,5 @@ export const createChat = async (res: Response, name: string) => {
     return data[0];
   } catch (error: any) {
     console.error("supabase error", error);
-    return new Response(JSON.stringify({ 
-      error: error.message,
-      details: error.details 
-    }), { 
-      status: 500,
-      headers: { 'Content-Type': 'application/json' }
-    });
   }  
 }

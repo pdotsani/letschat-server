@@ -31,8 +31,7 @@ export const createMessage = async (res: Response, params: CreateMessageParams) 
       throw new Error(error.message);
     }
 
-    return res.json({ message: 'Message created' });
   } catch (error) {
-    return res.status(500).json({ error: 'Failed to create message' });
+    console.error("supabase error", error);
   }
 }
