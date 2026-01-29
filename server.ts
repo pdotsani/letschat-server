@@ -147,7 +147,29 @@ app.get('/api/chats', async (req: Request, res: Response) => {
   return res.json(data);
 });
 
-app.get('/api/chat/:chatId', async (req: Request, res: Response) => {
+app.get('/api/chat/:chatId',  async (req: Request, res: Response) => {
+  const { chatId } = req.params;
+  const client = res.locals.client;
+  const { data: { user }, error: userError } = await client.auth.getUser();
+
+  if (userError || !user) {
+    throw new Error(userError?.message ? userError.message : 'Failed to get user');
+  }
+
+  const { data, error } = await client
+    .from('chats')
+    .select('id,name,updated_at')
+    .eq('id', chatId)
+    .eq('user_id', user.id);
+
+  if (error) {
+    return res.status(500).json({ error: 'Failed to get chat' });
+  }
+
+  return res.json(data);
+});
+
+app.get('/api/chat/:chatId/messages', async (req: Request, res: Response) => {
   const client = res.locals.client;
   const { data: { user }, error: userError } = await client.auth.getUser();
 
