@@ -1,7 +1,7 @@
 import { Ollama, ChatResponse, Message } from 'ollama';
-import { type ResponseMessage, RoleTypes } from 'letschat-types';
+import { RoleTypes } from 'letschat-types';
 
-export async function summarize(ollama: Ollama, model: string, newMessage: ResponseMessage) {
+export async function summarize(ollama: Ollama, model: string, newMessage: any) {
   const createLabelMessage: Message = {
     role: RoleTypes.System,
     content: 'Summarize the current conversation in seven words or less, declaratively without the user being mentioned.'

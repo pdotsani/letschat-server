@@ -44,7 +44,7 @@ app.post('/api/chat', async (req: Request, res: Response) => {
     return res.status(400).json({ error: 'Content is required' });
   }
 
-  const newMessage: ResponseMessage = {
+  const newMessage = {
     messageRole: RoleTypes.User,
     content,
   }
@@ -159,7 +159,7 @@ app.get('/api/chat/:chatId', async (req: Request, res: Response) => {
 
   const { data, error } = await client
     .from('messages')
-    .select('message,role,created_at')
+    .select('message,role,created_at,chat_id')
     .eq('chat_id', chatId)
     .order('created_at', { ascending: true });
 
@@ -167,7 +167,18 @@ app.get('/api/chat/:chatId', async (req: Request, res: Response) => {
     return res.status(500).json({ error: 'Failed to get chat messages' });
   }
 
-  return res.json(data);
+  const messages = data.map((message: any) => ({
+    content: message.message,
+    messageRole: message.role,
+    timestamp: message.created_at
+  }));
+
+  const response = {
+    chatId,
+    messages
+  }
+
+  return res.json(response);
 });
 
 app.delete('/api/chat/:chatId', async (req: Request, res: Response) => {
