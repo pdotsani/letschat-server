@@ -1,6 +1,6 @@
 # letschat-server
 
-This is a server that allows you to leverage the message api of ollama with any of the models available. You can link this up to a frontend. For the purposes of authentication, we are using Supabase.
+This is a server that allows you to leverage the message api of ollama with any of the models available. You can link this up to a frontend. For the purposes of authentication, authorization, and data access, we are using Supabase.
 
 ## Prerequisites
 
@@ -9,7 +9,7 @@ This is a server that allows you to leverage the message api of ollama with any 
 - Ollama
 - Supabase
 
-The frontend is a Next.js app, which can be found [here](https://github.com/pdotsani/letschat-frontend). You supabase credetials for the frontend will be used to authenticate the server.
+A working frontend is a Next.js app, which can be found [here](https://github.com/pdotsani/letschat-frontend). You supabase credetials for the frontend will be used to authenticate the server.
 
 We generate database schema in the supbase dashboard, see [this](/docs/schemas.md) for more information.
 
@@ -27,7 +27,7 @@ We generate database schema in the supbase dashboard, see [this](/docs/schemas.m
    ```
 2. Install dependencies:
    ```bash
-   npm install
+   npm i
    ```
 
 2. Configure environment variables:
