@@ -10,7 +10,7 @@ export const createChat = async (res: Response, name: string) => {
     }
 
     const { data, error } = await client.from('chats')
-      .insert({ name })
+      .insert({ name, user_id: user.id })
       .select('id');
 
     if (error) {
